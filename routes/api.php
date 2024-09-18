@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CuentasController;
 use App\Http\Controllers\IngresosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,4 +18,7 @@ Route::controller(tabla::class)->group(function () {
 
 Route::controller(IngresosController::class)->group(function () {
     Route::get('/ingresos', 'get');
+});
+Route::controller(CuentasController::class)->group(function () {
+    Route::get('/cuentas', 'get');
 });

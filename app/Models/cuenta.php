@@ -15,9 +15,11 @@ class cuenta extends Model
         return $query->where('status', '>', 0);
     }
 
-    public function detalleAnticipo()
+    public function detalleAnticipos()
     {
-        return $this->belongsTo(detalleAnticipo::class,'numero_cuenta','numero_cuenta')->where('status','>=',1);
+        return $this->hasMany(DetalleAnticipo::class, 'numero_cuenta', 'numero_cuenta')
+                    //->where('detalle_anticipos.folio_fiscal',$this->folio_fiscal)
+                    ->where('detalle_anticipos.status','>',0);
     }
 
     public function desgloceCheque()
