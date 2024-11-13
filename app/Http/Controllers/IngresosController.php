@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ingreso;
+use App\Models\IngresoModel;
 use Illuminate\Support\Facades\DB;
 
 class IngresosController extends Controller
@@ -11,15 +11,15 @@ class IngresosController extends Controller
     public function get(Request $request)
     {
         
-        $query = ingreso::{$request->status ?? 'activos'}();
+        $query = IngresoModel::{$request->status ?? 'activos'}();
         $arr_subConsultas = array();
         if(isset($request->subConsultas)){
             $arr_subConsultas = $request->subConsultas;
         }
-        $arr_subConsultas[] = 'banco';
-        $arr_subConsultas[] = 'cliente';
-        $arr_subConsultas[] = 'beneficiario';
-        $arr_subConsultas[] = 'tipoMovimientoBancario';
+        $arr_subConsultas[] = 'Banco';
+        $arr_subConsultas[] = 'Cliente';
+        $arr_subConsultas[] = 'Beneficiario';
+        $arr_subConsultas[] = 'TipoMovimientoBancario';
         $query->with($arr_subConsultas);
         if(isset($request->id_ingreso) && $request->id_ingreso > 0){
             $query->where('ingresos.id_ingreso',$request->id_ingreso);

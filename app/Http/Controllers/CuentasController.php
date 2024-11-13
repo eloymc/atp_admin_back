@@ -11,8 +11,8 @@ class CuentasController extends Controller
     public function get(Request $request)
     {
         $cuentas = saaio_pedime::concluidos()
-            ->whereDoesntHave('cuentasReferencias')
-            ->whereDoesntHave('cuentasPedimentos');
+            ->whereDoesntHave('CuentasReferencias')
+            ->whereDoesntHave('CuentasPedimentos');
         //$cuentas = cuenta::activo()->with(['detalleAnticipos'])->whereHas('detalleAnticipos')->whereYear('fecha_cuenta', 2024); cuentasPedimentos
         return response()->json($cuentas->paginate(15),200);
     }

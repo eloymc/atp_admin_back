@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ingreso;
-use App\Models\detalleIngreso;
+use App\Models\IngresoModel;
+use App\Models\DetalleIngresoModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,8 +14,8 @@ class tabla extends Controller
         if(isset($req->subConsultas)){
             $arr_subConsultas = $req->subConsultas;
         }
-        $arr_subConsultas[] = 'banco';
-        $query = ingreso::activo()->with($arr_subConsultas);
+        $arr_subConsultas[] = 'Banco';
+        $query = IngresoModel::activos()->with($arr_subConsultas);
         if(isset($req->id_ingreso) && $req->id_ingreso > 0){
             $query->where('ingresos.id_ingreso',$req->id_ingreso);
         }else{
@@ -29,7 +29,7 @@ class tabla extends Controller
     }
 
     public function ConsultaTabla2(Request $req){
-        $query = detalleIngreso::with(['ingreso']);
+        $query = DetalleIngresoModel::with(['ingreso']);
         $resultado = $query->get();
         return response()->json($resultado,200);
     }
