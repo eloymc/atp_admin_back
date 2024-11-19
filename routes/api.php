@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CuentasController;
 use App\Http\Controllers\IngresosController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,8 @@ Route::controller(IngresosController::class)->group(function () {
 });
 Route::controller(CuentasController::class)->group(function () {
     Route::get('/cuentas', 'get');
+});
+
+Route::controller(LoginController::class)->group(function () {
+    Route::post('/login', 'login');
 });

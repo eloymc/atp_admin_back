@@ -9,4 +9,9 @@ class UsuarioModel extends Model
 {
     use HasFactory;
     protected $table = 'usuario';
+
+    public function scopeActivo($query)
+    {
+        return $query->where('activo', 'S');
+    }
 }
