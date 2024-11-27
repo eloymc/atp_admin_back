@@ -5,12 +5,9 @@ use App\Http\Controllers\IngresosController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 use App\Http\Controllers\tabla;
+
+
  
 Route::controller(tabla::class)->group(function () {
     Route::get('/tabla', 'ConsultaTabla');
@@ -24,6 +21,11 @@ Route::controller(CuentasController::class)->group(function () {
     Route::get('/cuentas', 'get');
 });
 
-Route::controller(LoginController::class)->group(function () {
-    Route::post('/login', 'login');
+Route::middleware('auth:sanctum')->controller(LoginController::class)->group(function () {
+    Route::get('/usuario', 'Usuario');
 });
+
+Route::controller(LoginController::class)->group(function () {
+    Route::get('/login', 'login')->name('login');
+});
+

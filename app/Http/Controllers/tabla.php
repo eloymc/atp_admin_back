@@ -15,6 +15,11 @@ class tabla extends Controller
             $arr_subConsultas = $req->subConsultas;
         }
         $arr_subConsultas[] = 'Banco';
+        //$arr_subConsultas[] = 'Cliente';
+        //$arr_subConsultas[] = 'Beneficiario';
+        //$arr_subConsultas[] = 'DetalleIngresos';
+        //$arr_subConsultas[] = 'DetalleIngresosAnticipos';
+        //$arr_subConsultas[] = 'DetalleIngresosCheques';
         $query = IngresoModel::activos()->with($arr_subConsultas);
         if(isset($req->id_ingreso) && $req->id_ingreso > 0){
             $query->where('ingresos.id_ingreso',$req->id_ingreso);
@@ -25,6 +30,7 @@ class tabla extends Controller
             $query->where('ingresos.importe','!=',DB::raw('ingresos.importe_aplicado'));
         }
         $ingresos = $query->paginate(5);
+        //$ingresos = $query->get();
         return response()->json($ingresos,200);
     }
 
