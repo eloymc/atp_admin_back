@@ -29,10 +29,10 @@ class LoginController extends Controller
                     $token = $this->usuario->createToken($request->usuario)->plainTextToken;
                     $datos = array("errors"=>null,"message"=>$token, "codigo"=>200);
                 }else{
-                    $datos = array("errors"=>"fail authentication","message"=>"Problemas para autenticar", "codigo"=>403);
+                    $datos = array("errors"=>"fail authentication","message"=>"Problemas para autenticar B", "codigo"=>403);
                 }
             }else{
-                $datos = array("errors"=>"fail authentication","message"=>"Problemas para autenticar", "codigo"=>403);
+                $datos = array("errors"=>"fail authentication","message"=>"Problemas para autenticar A", "codigo"=>403);
             }
             return response()->json($datos,$datos['codigo']);
             
