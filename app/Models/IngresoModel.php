@@ -89,6 +89,6 @@ class IngresoModel extends Model
     }
     public function TipoMovimientoBancario()
     {
-        return $this->hasOne(TiposMovimientosBancarioModel::class,'id_tipo_mov_banc','id_tipo_mov_banc')->select('id_tipo_mov_banc','descripcion_mov');
+        return $this->hasOne(TiposMovimientoBancarioModel::class,'id_tipo_mov_banc','id_tipo_mov_banc')->select('id_tipo_mov_banc','descripcion_mov');
     }
 }
