@@ -10,10 +10,22 @@ class IngresoModel extends Model
 {
     use HasFactory;
     protected $table = 'ingresos';
+    protected $appends = [
+        'total_anticipos',
+        'total_pago_cuentas',
+        'total_varios',
+        'total_anticipos_aplicados',
+        'total_pago_cuentas_aplicados',
+        'total_varios_aplicados',
+    ];
     
     public $id_conceptos = array(
         "altamira"=>array("anticipos"=>10,"cheques"=>9,"varios"=>12)
     );
+
+    ////////////////////////////////////
+    ///SCOPE'S
+    ////////////////////////////////////
 
     public function scopeCancelados($query)
     {
@@ -50,21 +62,25 @@ class IngresoModel extends Model
                  ->whereYear('fecha_movimiento', $anio);
     }
 
+    ////////////////////////////////////
+    ///RELACIONES
+    ////////////////////////////////////
+
     public function DetalleIngresosAnticipos()
     {
-        $schema = DB::select("SELECT current_schema();")[0]->current_schema;
+        $schema = env('OFICINA_SCHEMA');
         return $this->hasMany(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('id_concepto_ingreso', $this->id_conceptos[$schema]['anticipos'])->where('status','>=',1);
     }
 
     public function DetalleIngresosCheques()
     {
-        $schema = DB::select("SELECT current_schema();")[0]->current_schema;
+        $schema = env('OFICINA_SCHEMA');
         return $this->hasMany(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('id_concepto_ingreso', $this->id_conceptos[$schema]['cheques'])->where('status','>=',1);
     }
 
     public function DetalleIngresosDepositosVarios()
     {
-        $schema = DB::select("SELECT current_schema();")[0]->current_schema;
+        $schema = env('OFICINA_SCHEMA');
         return $this->hasMany(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('id_concepto_ingreso', $this->id_conceptos[$schema]['varios'])->where('status','>=',1);
     }
 
@@ -90,5 +106,45 @@ class IngresoModel extends Model
     public function TipoMovimientoBancario()
     {
         return $this->hasOne(TiposMovimientoBancarioModel::class,'id_tipo_mov_banc','id_tipo_mov_banc')->select('id_tipo_mov_banc','descripcion_mov');
+    }
+
+    ////////////////////////////////////
+    ///OTROS ATRIBUTOS
+    ////////////////////////////////////
+
+    public function getTotalAnticiposAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['anticipos'])->sum('importe');
+    }
+
+    public function getTotalPagoCuentasAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['cheques'])->sum('importe');
+    }
+
+    public function getTotalVariosAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['varios'])->sum('importe');
+    }
+
+    public function getTotalAnticiposAplicadosAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['anticipos'])->sum('importe_aplicado');
+    }
+
+    public function getTotalPagoCuentasAplicadosAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['cheques'])->sum('importe_aplicado');
+    }
+
+    public function getTotalVariosAplicadosAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['varios'])->sum('importe_aplicado');
     }
 }

@@ -20,6 +20,10 @@ class IngresosController extends Controller
         $arr_subConsultas[] = 'Cliente';
         $arr_subConsultas[] = 'Beneficiario';
         $arr_subConsultas[] = 'TipoMovimientoBancario';
+        $arr_subConsultas[] = 'DetalleIngresos';
+        $arr_subConsultas[] = 'DetalleIngresosAnticipos';
+        $arr_subConsultas[] = 'DetalleIngresosCheques';
+        $arr_subConsultas[] = 'DetalleIngresosDepositosVarios';
         $query->with($arr_subConsultas);
         if(isset($request->id_ingreso) && $request->id_ingreso > 0){
             $query->where('ingresos.id_ingreso',$request->id_ingreso);
@@ -35,6 +39,7 @@ class IngresosController extends Controller
                 }
             }
         }
+        //$query->pendientes();
         if(isset($request->paginate)){
             $ingresos = $query->paginate(15);
         }else{

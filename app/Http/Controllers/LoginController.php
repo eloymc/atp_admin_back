@@ -34,7 +34,8 @@ class LoginController extends Controller
             }else{
                 $datos = array("errors"=>"fail authentication","message"=>"Problemas para autenticar A", "codigo"=>403);
             }
-            return response()->json($datos,$datos['codigo']);
+            
+            return response()->json($datos,$datos['codigo'], [], JSON_UNESCAPED_UNICODE);
             
         }catch (ValidationException $e) {
             return response()->json([
@@ -49,6 +50,7 @@ class LoginController extends Controller
                     'error' => $e->getMessage(),
                 ], 401);
             }else{
+                
                 return response()->json([
                     'message' => 'Ocurrio un error inesperado',
                     'error' => $e->getMessage(),
@@ -72,7 +74,7 @@ class LoginController extends Controller
         $accessToken = PersonalAccessToken::findToken($token);
 
         if (!$accessToken) {
-            return response()->json(['message' => 'Token inválido'], 401);
+            return response()->json(['message' => 'Token invï¿½lido'], 401);
         }
 
         $user = $accessToken->tokenable;
