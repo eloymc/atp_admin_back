@@ -21,7 +21,8 @@ class IngresosController extends Controller
         $arr_subConsultas[] = 'Beneficiario';
         $arr_subConsultas[] = 'TipoMovimientoBancario';
         $arr_subConsultas[] = 'DetalleIngresos';
-        $arr_subConsultas[] = 'DetalleIngresosAnticipos';
+        $arr_subConsultas[] = 'DetalleIngresosAnticipos.Anticipo';
+        //$arr_subConsultas[] = 'Anticipos';
         $arr_subConsultas[] = 'DetalleIngresosCheques';
         $arr_subConsultas[] = 'DetalleIngresosDepositosVarios';
         $query->with($arr_subConsultas);
@@ -39,7 +40,7 @@ class IngresosController extends Controller
                 }
             }
         }
-        //$query->pendientes();
+        $query->ordenFechaDesc();
         if(isset($request->paginate)){
             $ingresos = $query->paginate(15);
         }else{

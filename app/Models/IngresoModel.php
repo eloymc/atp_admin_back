@@ -14,13 +14,15 @@ class IngresoModel extends Model
         'total_anticipos',
         'total_pago_cuentas',
         'total_varios',
+        'total_garantias',
         'total_anticipos_aplicados',
         'total_pago_cuentas_aplicados',
         'total_varios_aplicados',
+        'total_garantias_aplicados',
     ];
     
     public $id_conceptos = array(
-        "altamira"=>array("anticipos"=>10,"cheques"=>9,"varios"=>12)
+        "altamira"=>array("anticipos"=>10,"cheques"=>9,"varios"=>12,"garantias"=>13)
     );
 
     ////////////////////////////////////
@@ -30,6 +32,11 @@ class IngresoModel extends Model
     public function scopeCancelados($query)
     {
         return $query->where('status', 0);
+    }
+
+    public function scopeOrdenFechaDesc($query)
+    {
+        return $query->orderBy('fecha_movimiento', 'desc');
     }
 
     public function scopeActivos($query)
@@ -89,6 +96,11 @@ class IngresoModel extends Model
         return $this->hasMany(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
     }
 
+    public function Anticipos()
+    {
+        return $this->hasMany(AnticipoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+    }
+
     public function Banco()
     {
         return $this->hasOne(BancoModel::class,'id_banco','id_banco')->select('id_banco','nombre_banco','cuenta_bancaria','cc_central');
@@ -130,10 +142,17 @@ class IngresoModel extends Model
         return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['varios'])->sum('importe');
     }
 
-    public function getTotalAnticiposAplicadosAttribute()
+    public function getTotalGarantiasAttribute()
     {
         $schema = env('OFICINA_SCHEMA');
-        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['anticipos'])->sum('importe_aplicado');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['garantias'])->sum('importe');
+    }
+
+    public function getTotalAnticiposAplicadosAttribute()
+    {
+        return $this->anticipos->flatMap(function ($anticipo) {
+            return $anticipo->detalleConFolios;
+        })->sum('impuestos');
     }
 
     public function getTotalPagoCuentasAplicadosAttribute()
@@ -146,5 +165,11 @@ class IngresoModel extends Model
     {
         $schema = env('OFICINA_SCHEMA');
         return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['varios'])->sum('importe_aplicado');
+    }
+
+    public function getTotalGarantiasAplicadosAttribute()
+    {
+        $schema = env('OFICINA_SCHEMA');
+        return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['garantias'])->sum('importe_aplicado');
     }
 }

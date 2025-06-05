@@ -15,8 +15,18 @@ class AnticipoModel extends Model
         return $this->belongsTo(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
     }
 
+    public function Ingreso()
+    {
+        return $this->belongsTo(IngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+    }
+
     public function Detalle()
     {
         return $this->hasMany(DetalleAnticipoModel::class,'id_anticipo','id_anticipo')->where('status','>=',1);
+    }
+
+    public function DetalleConFolios()
+    {
+        return $this->hasMany(DetalleAnticipoModel::class,'id_anticipo','id_anticipo')->whereNotNull('folio_fiscal')->whereNotNull('numero_cuenta')->where('status','>=',1);
     }
 }
