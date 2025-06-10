@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\central;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TraficoModel extends EsquemaBaseModel
+class DivisionModel extends Model
 {
     use HasFactory;
-    protected $table = "trafico";
-
+    protected $table = 'central.division';
 }

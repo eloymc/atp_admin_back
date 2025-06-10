@@ -3,6 +3,7 @@
 use App\Http\Controllers\CuentasController;
 use App\Http\Controllers\IngresosController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\especial\CentrexController;
 use App\Models\BancoModel;
 use App\Models\ClienteModel;
 use App\Models\BeneficiarioModel;
@@ -42,8 +43,15 @@ Route::middleware('auth:sanctum')->controller(IngresosController::class)->group(
     Route::get('/ingresos', 'get');
 });
 
+
 Route::middleware('auth:sanctum')->controller(CuentasController::class)->group(function () {
     Route::get('/cuentas', 'get');
+});
+
+Route::prefix('especiales')->middleware('auth:sanctum')->group(function () {
+    Route::controller(CentrexController::class)->group(function () {
+        Route::get('/centrex', 'get');
+    });
 });
 
 

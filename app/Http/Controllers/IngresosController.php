@@ -16,15 +16,22 @@ class IngresosController extends Controller
         if(isset($request->subConsultas)){
             $arr_subConsultas = $request->subConsultas;
         }
+        //$arr_subConsultas[] = 'DetalleIngresos';
+        //$arr_subConsultas[] = 'DetalleIngresosAnticipos';
+        //$arr_subConsultas[] = 'DetalleIngresosCheques';
+        //$arr_subConsultas[] = 'DetalleIngresosDepositosVarios';
         $arr_subConsultas[] = 'Banco';
         $arr_subConsultas[] = 'Cliente';
         $arr_subConsultas[] = 'Beneficiario';
         $arr_subConsultas[] = 'TipoMovimientoBancario';
-        $arr_subConsultas[] = 'DetalleIngresos';
-        $arr_subConsultas[] = 'DetalleIngresosAnticipos.Anticipo';
-        //$arr_subConsultas[] = 'Anticipos';
-        $arr_subConsultas[] = 'DetalleIngresosCheques';
-        $arr_subConsultas[] = 'DetalleIngresosDepositosVarios';
+        $arr_subConsultas[] = 'Anticipo';
+        $arr_subConsultas[] = 'Cheque';
+        $arr_subConsultas['Anticipo.Detalle'] = function ($query) {
+            $query->select('id_detalle_anticipo', 'id_anticipo', 'referencia', 'folio_fiscal','numero_cuenta','impuestos','fletes','pagos_terceros','hon_comp'); 
+        };
+        $arr_subConsultas['Cheque.Detalle'] = function ($query) {
+            $query->select('id_desgloce', 'id_cheque', 'folio_fiscal','numero_cuenta','importe');
+        };
         $query->with($arr_subConsultas);
         if(isset($request->id_ingreso) && $request->id_ingreso > 0){
             $query->where('ingresos.id_ingreso',$request->id_ingreso);

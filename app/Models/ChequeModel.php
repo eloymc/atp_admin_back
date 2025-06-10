@@ -15,7 +15,7 @@ class ChequeModel extends Model
         return $this->belongsTo(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
     }
 
-    public function DesgloceCheque()
+    public function Detalle()
     {
         return $this->hasMany(DesgloceChequeModel::class,'id_cheque','id_cheque')->where('status','>=',1);
     }

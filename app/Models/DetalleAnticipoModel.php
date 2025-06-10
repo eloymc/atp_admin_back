@@ -9,7 +9,7 @@ class DetalleAnticipoModel extends Model
 {
     use HasFactory;
     protected $table = 'detalle_anticipos';
-
+    
     public function Anticipo()
     {
         return $this->belongsTo(AnticipoModel::class,'id_anticipo','id_anticipo')->where('status','>=',1);
@@ -21,4 +21,5 @@ class DetalleAnticipoModel extends Model
                     ->where('folio_fiscal', $this->folio_fiscal)
                     ->where('status','>',0);
     }
+
 }

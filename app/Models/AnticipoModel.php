@@ -12,12 +12,12 @@ class AnticipoModel extends Model
 
     public function DetalleIngreso()
     {
-        return $this->belongsTo(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+        return $this->belongsTo(DetalleIngresoModel::class,'id_ingreso','id_ingreso');
     }
 
     public function Ingreso()
     {
-        return $this->belongsTo(IngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+        return $this->belongsTo(IngresoModel::class,'id_ingreso','id_ingreso');
     }
 
     public function Detalle()

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class IngresoModel extends Model
+class IngresoModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = 'ingresos';
@@ -15,14 +15,15 @@ class IngresoModel extends Model
         'total_pago_cuentas',
         'total_varios',
         'total_garantias',
-        'total_anticipos_aplicados',
+        //'total_anticipos_aplicados',
         'total_pago_cuentas_aplicados',
         'total_varios_aplicados',
         'total_garantias_aplicados',
     ];
     
     public $id_conceptos = array(
-        "altamira"=>array("anticipos"=>10,"cheques"=>9,"varios"=>12,"garantias"=>13)
+        "altamira"=>array("anticipos"=>10,"cheques"=>9,"varios"=>12,"garantias"=>13),
+        "vallejo"=>array("anticipos"=>6,"cheques"=>2,"varios"=>3,"garantias"=>0)
     );
 
     ////////////////////////////////////
@@ -96,9 +97,14 @@ class IngresoModel extends Model
         return $this->hasMany(DetalleIngresoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
     }
 
-    public function Anticipos()
+    public function Anticipo()
     {
-        return $this->hasMany(AnticipoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+        return $this->hasOne(AnticipoModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
+    }
+
+    public function Cheque()
+    {
+        return $this->hasOne(ChequeModel::class,'id_ingreso','id_ingreso')->where('status','>=',1);
     }
 
     public function Banco()
@@ -148,12 +154,12 @@ class IngresoModel extends Model
         return $this->DetalleIngresos()->where('id_concepto_ingreso', $this->id_conceptos[$schema]['garantias'])->sum('importe');
     }
 
-    public function getTotalAnticiposAplicadosAttribute()
-    {
-        return $this->anticipos->flatMap(function ($anticipo) {
-            return $anticipo->detalleConFolios;
-        })->sum('impuestos');
-    }
+    //public function getTotalAnticiposAplicadosAttribute()
+    //{
+    //    return $this->anticipos->flatMap(function ($anticipo) {
+    //        return $anticipo->detalleConFolios;
+    //    })->sum('impuestos');
+    //}
 
     public function getTotalPagoCuentasAplicadosAttribute()
     {
