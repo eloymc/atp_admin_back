@@ -33,7 +33,7 @@ class CentrexController extends Controller
     );
     public $registros = array();
     public $rango_fecha_consulta = array();
-    public $conteos = array("referencias"=>array(),"guias"=>array());
+    public $conteos = array("referencias"=>array(),"guias"=>array(), "guias_frabel"=>array(), "guias_contenedores"=>array());
     public $reglas = array(
         "contenedores"=>array(
             array( "de"=>0,"a"=>0,"importe"=>2000 ),
@@ -122,17 +122,33 @@ class CentrexController extends Controller
                     $this->conteos['referencias'][$registro->referencia]++ ;
                 }
                 if($registro->guia){
+                    $this->conteos['guias_frabel'][$registro->guia] = 0;
                     if(!isset($this->conteos['guias'][$registro->guia])){
                         $this->conteos['guias'][$registro->guia] = 1;
                     }else{
                         $this->conteos['guias'][$registro->guia]++ ;
                     }
                     if(!isset($this->registros[$schema])) $this->registros[$schema] = array() ;
+                    if($registro->nombre_cliente == 'FRABEL, S.A. DE C.V.'){
+                        if(!isset($this->conteos['guias_frabel'][$registro->guia])){
+                            $this->conteos['guias_frabel'][$registro->guia] = 1;
+                        }else{
+                            $this->conteos['guias_frabel'][$registro->guia]++ ;
+                        }
+                    }
                 }else{
                     $this->conteos['guias'][$registro->guia] = 1;
                     $registro->no_guia = 1;
                 }
-                
+                if(!is_null($registro->guia)){
+                    if(!isset($this->conteos['guias_contenedores'][$registro->guia])){
+                        $this->conteos['guias_contenedores'][$registro->guia] = array();
+                    }
+                    if(!isset($this->conteos['guias_contenedores'][$registro->guia][$registro->numero_contenedor])){
+                        $this->conteos['guias_contenedores'][$registro->guia][$registro->numero_contenedor] = 0;
+                    }
+                    $this->conteos['guias_contenedores'][$registro->guia][$registro->numero_contenedor] = 1;
+                }
                 
                 $this->registros[$schema][] = $registro;
             }
@@ -145,12 +161,24 @@ class CentrexController extends Controller
             foreach($regs as $k_reg => $reg){
                 if($reg->no_guia == 1){
                     foreach($this->reglas['contenedores'] as $regla){
-                        //dd($this->conteos['guias'][$reg->guia] >= $regla['de'] && $this->conteos['guias'][$reg->guia] <= $regla['a']);
-                        if($this->conteos['guias'][$reg->guia] >= $regla['de'] && $this->conteos['guias'][$reg->guia] <= $regla['a']){
+                        $restar = ($reg->guia != '' && $this->conteos['guias_frabel'][$reg->guia]) ? $this->conteos['guias_frabel'][$reg->guia] : 0;
+                        $cuentas_guias_son = $this->conteos['guias'][$reg->guia] - $restar;
+                        if(!is_null($reg->guia)){
+                            $cuentas_contenedores_son = count($this->conteos['guias_contenedores'][$reg->guia]);
+                        }else{
+                            $cuentas_contenedores_son = 1;
+                        }
+                        if($cuentas_contenedores_son >= $regla['de'] && $cuentas_contenedores_son <= $regla['a']){
+                            $this->registros[$oficina][$k_reg]['numero_contenedores'] = $cuentas_contenedores_son;
                             $this->registros[$oficina][$k_reg]['rango_tarifa'] = $regla['de']." a ".$regla['a'];
                             $this->registros[$oficina][$k_reg]['monto_aplicable'] = $regla['importe'];
+                            $importe_dividido = $regla['importe'] / $cuentas_guias_son;
                         }
                     }
+                }
+                $this->registros[$oficina][$k_reg]['honorarios'] = "";
+                if($reg->nombre_cliente != "FRABEL, S.A. DE C.V."){
+                    $this->registros[$oficina][$k_reg]['honorarios'] = $importe_dividido;
                 }
             }
         }
