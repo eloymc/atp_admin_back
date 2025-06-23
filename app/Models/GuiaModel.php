@@ -9,4 +9,5 @@ class GuiaModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = 'guia';
+    public $timestamps = false;
 }

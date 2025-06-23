@@ -59,22 +59,25 @@ class LoginController extends Controller
         }
     }
 
-    public function Usuario(Request $request){
+    public function Usuario(Request $request, $json = true){
         $token = $request->bearerToken();
         if (!$token) {
             return response()->json(['message' => 'Token no proporcionado'], 401);
         }
 
         $user = $this->DatosToken($token);
-
-        return response()->json($user,200);
+        if($json){
+            return response()->json($user,200);
+        }else{
+            return $user;
+        }
     }
 
     public function DatosToken($token,$restringido = true){
         $accessToken = PersonalAccessToken::findToken($token);
 
         if (!$accessToken) {
-            return response()->json(['message' => 'Token inv�lido'], 401);
+            return response()->json(['message' => 'Token invalido'], 401);
         }
 
         $user = $accessToken->tokenable;

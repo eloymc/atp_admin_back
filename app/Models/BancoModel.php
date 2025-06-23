@@ -10,6 +10,7 @@ class BancoModel extends Model
 {
     use HasFactory;
     protected $table = 'bancos';
+    public $timestamps = false;
 
     public function scopeActivos($query)
     {

@@ -9,6 +9,8 @@ class DetalleIngresoModel extends Model
 {
     use HasFactory;
     protected $table = 'detalle_ingresos';
+    public $timestamps = false;
+    protected $primaryKey = 'id_detalle_ingreso';
 
     public function Ingreso()
     {

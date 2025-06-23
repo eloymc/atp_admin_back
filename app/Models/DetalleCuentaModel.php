@@ -9,4 +9,6 @@ class DetalleCuentaModel extends Model
 {
     use HasFactory;
     protected $table = "detalle_cuentas";
+    public $timestamps = false;
+    protected $primaryKey = false;
 }

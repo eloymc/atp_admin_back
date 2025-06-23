@@ -9,4 +9,5 @@ class ContenedorModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = 'contenedor';
+    public $timestamps = false;
 }

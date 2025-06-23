@@ -10,6 +10,9 @@ class IngresoModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = 'ingresos';
+    protected $primaryKey = 'id_ingreso';
+    public $incrementing = true;
+    public $timestamps = false;
     protected $appends = [
         'total_anticipos',
         'total_pago_cuentas',
@@ -68,6 +71,12 @@ class IngresoModel extends EsquemaBaseModel
     {
         return $query->where('status', 1)
                  ->whereYear('fecha_movimiento', $anio);
+    }
+
+    public function scopeRangoFecha($query,$inicio,$fin)
+    {
+        return $query->where('status', 1)
+                 ->whereBetween('fecha_movimiento', [$inicio,$fin]);
     }
 
     ////////////////////////////////////

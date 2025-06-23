@@ -9,6 +9,8 @@ class CuentasModel extends Model
 {
     use HasFactory;
     protected $table = "cuentas";
+    public $timestamps = false;
+    protected $primaryKey = 'id_cuenta';
 
     public function scopeActivo($query)
     {

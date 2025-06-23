@@ -10,6 +10,7 @@ class BeneficiarioModel extends Model
 {
     use HasFactory;
     protected $table = 'beneficiarios';
+    public $timestamps = false;
 
     public function scopeActivos($query)
     {

@@ -10,6 +10,7 @@ class SaaioPedimeModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = 'saaio_pedime';
+    public $timestamps = false;
 
     public function scopeConFechaPago($query, $rango){
         $desde = $rango[0] ?? (date("Y") - 7)."-01-01";

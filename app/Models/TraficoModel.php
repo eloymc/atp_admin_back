@@ -9,5 +9,6 @@ class TraficoModel extends EsquemaBaseModel
 {
     use HasFactory;
     protected $table = "trafico";
+    public $timestamps = false;
 
 }

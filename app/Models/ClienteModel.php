@@ -11,6 +11,7 @@ class ClienteModel extends EsquemaBaseModel
     use HasFactory;
     protected $table = 'cliente';
     protected $rawTable = 'cliente';
+    public $timestamps = false;
 
     public function scopeCatalogo($query)
     {

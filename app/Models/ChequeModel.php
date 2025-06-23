@@ -9,6 +9,8 @@ class ChequeModel extends Model
 {
     use HasFactory;
     protected $table = 'cheques';
+    public $timestamps = false;
+    protected $primaryKey = 'id_cheque';
 
     public function DetalleIngreso()
     {

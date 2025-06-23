@@ -9,6 +9,8 @@ class DesgloceChequeModel extends Model
 {
     use HasFactory;
     protected $table = 'desgloce_cheques';
+    public $timestamps = false;
+    protected $primaryKey = 'id_desgloce';
 
     public function Cheque()
     {

@@ -11,6 +11,7 @@ class UsuarioModel extends Model
     use HasApiTokens;
     use HasFactory;
     protected $table = 'usuario';
+    public $timestamps = false;
 
     public function scopeActivo($query)
     {

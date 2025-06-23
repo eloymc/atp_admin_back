@@ -9,4 +9,5 @@ class TiposMovimientoBancarioModel extends Model
 {
     use HasFactory;
     protected $table = 'tipos_mov_banc';
+    public $timestamps = false;
 }

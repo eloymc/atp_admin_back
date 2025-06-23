@@ -9,4 +9,6 @@ class DepositosVariosModel extends Model
 {
     use HasFactory;
     protected $table = "depositos_varios";
+    public $timestamps = false;
+    protected $primaryKey = 'id_deposito';
 }

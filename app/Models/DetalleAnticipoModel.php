@@ -9,6 +9,8 @@ class DetalleAnticipoModel extends Model
 {
     use HasFactory;
     protected $table = 'detalle_anticipos';
+    public $timestamps = false;
+    protected $primaryKey = 'id_detalle_anticipo';
     
     public function Anticipo()
     {
