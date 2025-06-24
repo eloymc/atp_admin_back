@@ -29,7 +29,7 @@ class IngresoService
         $arr_subConsultas[] = 'Anticipo'              ;
         $arr_subConsultas[] = 'Cheque'                ;
         $arr_subConsultas['Anticipo.Detalle'] = function ($query) {
-            $query->select('id_detalle_anticipo', 'id_anticipo', 'referencia', 'folio_fiscal','numero_cuenta','impuestos','fletes','pagos_terceros','hon_comp'); 
+            $query->select('id_detalle_anticipo', 'id_anticipo', 'referencia', 'folio_fiscal','numero_cuenta','impuestos','fletes','pagos_terceros','hon_comp','tipo_cuenta'); 
         };
         $arr_subConsultas['Cheque.Detalle'] = function ($query) {
             $query->select('id_desgloce', 'id_cheque', 'folio_fiscal','numero_cuenta','importe');

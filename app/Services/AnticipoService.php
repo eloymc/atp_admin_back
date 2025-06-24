@@ -25,10 +25,12 @@ class AnticipoService
 
     public function guardarDetalleAnticipo(Request $request, $user)
     {
+        
         return DB::transaction(function () use ($request,$user) {
             $id_concepto = $_ENV['ID_ANTICIPO'];
             $anticipo = AnticipoModel::where('id_anticipo',$request->id_anticipo)->first();
             foreach($request->desglosar_anticipos as $registro_anticipo){
+                if(isset($registro_anticipo['id_detalle_anticipo']) && $registro_anticipo['id_detalle_anticipo'] > 0) continue;
                 $detalle_anticipo = $this->InsertDetalleAnticipo($request, $user, $anticipo, $registro_anticipo);
                 $anticipo->importe_aplicado = $anticipo->importe_aplicado + $registro_anticipo['importe'];
                 if(!$anticipo->save()){
@@ -40,7 +42,7 @@ class AnticipoService
                     throw new Exception('Error al ajustar Ingreso desde Anticipo');
                 }
             }
-            return $detalle_anticipo;
+            return $anticipo;
         });
     }
 
@@ -51,6 +53,25 @@ class AnticipoService
             throw new Exception('Error al ajustar con suma Anticipo');
         }
         return $anticipo;
+    }
+
+    public function quitarDetalleAnticipo($request, $id_detalle_anticipo, $user){
+        return DB::transaction(function () use ($request, $id_detalle_anticipo, $user) {
+            $detalle = DetalleAnticipoModel::where('id_detalle_anticipo',$id_detalle_anticipo)->first();
+            $anticipo = AnticipoModel::where('id_anticipo',$detalle->id_anticipo)->first();
+            $anticipo->importe_aplicado = $anticipo->importe_aplicado - $detalle->impuestos;
+            if(!$anticipo->save()){
+                throw new Exception('Error al regresar Anticipo');
+            }
+            $detalle->status = 0;
+            $detalle->usuario_cancela = $user->cveusuario;
+            $detalle->fechacancelacion = date("Y-m-d H:i:s");
+            $detalle->ip_cancelacion = $request->getClientIp();
+            if(!$detalle->save()){
+                throw new Exception('Error al eliminar desgloce de Anticipo');
+            }
+            return $anticipo;
+        });
     }
 
 

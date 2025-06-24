@@ -8,6 +8,7 @@ use App\Http\Controllers\catalogos\ClienteController;
 use App\Http\Controllers\catalogos\BancosController;
 use App\Http\Controllers\catalogos\BeneficiarioController;
 use App\Http\Controllers\catalogos\TiposMovimientosBancarioController;
+use App\Http\Controllers\ingresos\DetalleAnticiposController;
 use App\Http\Controllers\especial\CentrexController;
 use App\Models\BancoModel;
 use App\Models\ClienteModel;
@@ -41,7 +42,9 @@ Route::middleware('auth:sanctum')->controller(TiposMovimientosBancarioController
 });
 
 /********** INGRESOS **************/
-Route::middleware('auth:sanctum')->apiResource('ingresos', IngresosController::class)->only(['index', 'show', 'store', 'update']);
+Route::middleware('auth:sanctum')->apiResource('ingresos', IngresosController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+/********** ANTICIPO DETALLE **************/
+Route::middleware('auth:sanctum')->apiResource('detalle-anticipo', DetalleAnticiposController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 
 /********** TRAFICO **************/
 Route::middleware('auth:sanctum')->apiResource('trafico', TraficoController::class)->only(['index'/*, 'show', 'store', 'update'*/]);
